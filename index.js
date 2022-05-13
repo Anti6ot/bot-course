@@ -14,10 +14,12 @@ const starGame = async (chatId) => {
     const randomNumber = Math.floor(Math.random() * 2);
     chats[chatId] = randomNumber;
     await bot.sendMessage(chatId, `Отгадывай`, gameOptions);
+    // console.log(randomNumber);
 }
+// after click but start
 const start = () => {
 
-    bot.setMyCommands([
+    bot.setMyCommands([  /* спомощью комманд API добавили две кнопки в тг */
         { command: '/start', description: 'Начальное приветствие' },
         { command: '/game', description: 'Угадай цифру' }
     ])
@@ -25,6 +27,7 @@ const start = () => {
     bot.on('message', async msg => {
         const text = msg.text;
         const chatId = msg.chat.id;
+        // console.log(msg);
         if (text === '/start') {
             await bot.sendSticker(chatId, `https://tlgrm.ru/_/stickers/5cc/7a5/5cc7a5e5-1c4d-4eb5-8ea2-94a23e4142a9/7.webp`)
             return bot.sendMessage(chatId, `Добро Пожаловать Крошка`)
@@ -41,7 +44,7 @@ const start = () => {
         if(data === '/again'){
            return starGame(chatId)
         }
-        if (data === chats[chatId]) {
+        if (+data === chats[chatId]) {
             return  bot.sendMessage(chatId, `поздравляю ты отгадала ${chats[chatId]}`, againOptions)
         } else {
             return  bot.sendMessage(chatId, `К сожалению ты не угадала, я загадал ${chats[chatId]}`, againOptions)
